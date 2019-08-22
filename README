@@ -1,0 +1,66 @@
+1. Introduction
+===============
+This is a yocto project (https://www.yoctoproject.org/) layer containing recipes to build an image that can run on a galleon ntp appliance.
+
+This README file contains information on the contents of the meta-ntpserver layer. Please see the corresponding sections below for yocto and poky specific details.
+
+2. Dependencies
+===============
+
+This layer depends on:
+
+    URI: http://git.yoctoproject.org/git/poky
+    layers: meta, meta-poky, meta-yocto-bsp
+    branch: warrior
+
+    URI: http://git.openembedded.org/meta-openembedded
+    layers: meta-oe, meta-python, meta-networking
+    branch: warrior
+
+3. Patches
+==========
+Please submit any patches against the meta-ntpserver layer to the maintainer.
+
+Maintainer: Thomas Stewart <thomas@stewarts.org.uk>
+
+4. Using 
+========
+In order to use this layer, you need to make the build system aware of it.
+
+Assuming the meta-ntpserver layer exists at the top-level of your yocto build tree, you can add it to the build system by adding the location of the meta-ntpserver layer to bblayers.conf, along with any other layers needed. e.g.:
+
+    BBLAYERS ?= " \
+        /path/to/yocto/meta \
+        /path/to/yocto/meta-poky \
+        /path/to/yocto/meta-yocto-bsp \
+        /path/to/yocto/meta-openembedded/meta-oe \
+        /path/to/yocto/meta-openembedded/meta-python \
+        /path/to/yocto/meta-openembedded/meta-networking \
+        /path/to/yocto/meta-meta-ntpserver \
+        "
+
+This adds an image called ntpserver-image. It expects some configuration to be defined in build/conf/local.conf. Add the following to local.conf:
+
+    MACHINE = "galleon"
+    DISTRO = "ntpserver
+    ROOT_PASSWORD = "my_password_for_root_ssh"
+
+Then run "bitbake ntpserver-image" and it should produce a working image.
+
+5. Example Build
+================
+git clone http://git.yoctoproject.org/git/poky -b warrior
+cd poky
+git clone http://git.openembedded.org/meta-openembedded -b warrior
+git clone https://github.com/thomasdstewart/meta-ntpsever.git
+. oe-init-build-env
+bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
+bitbake-layers add-layer $PWD/../meta-openembedded/meta-python
+bitbake-layers add-layer $PWD/../meta-openembedded/meta-networking
+bitbake-layers add-layer $PWD/../meta-ntpserver
+
+echo 'MACHINE = "galleon"' >> conf/local.conf
+echo 'DISTRO = "ntpserver"' >> conf/local.conf
+echo 'ROOT_PASSWORD = "password"' >> conf/local.conf
+
+bitbake ntpserver-image
