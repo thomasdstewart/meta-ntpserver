@@ -1,0 +1,9 @@
+[Unit]
+Description=LCD Status
+
+[Service] 
+Type=simple
+ExecStart=/sbin/lcdstatus
+
+[Install]
+WantedBy=basic.target

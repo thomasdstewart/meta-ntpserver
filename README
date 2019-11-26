@@ -1,66 +1,106 @@
-1. Introduction
-===============
 This is a yocto project (https://www.yoctoproject.org/) layer containing recipes to build an image that can run on a galleon ntp appliance.
 
-This README file contains information on the contents of the meta-ntpserver layer. Please see the corresponding sections below for yocto and poky specific details.
+This README file contains information on the contents of the meta-ntpserver layer. Please see the corresponding sections below for details.
 
-2. Dependencies
-===============
+Dependencies
+============
 
-This layer depends on:
+  URI: http://git.yoctoproject.org/git/poky
+  layers: meta, meta-poky, meta-yocto-bsp
+  branch: zeus
 
-    URI: http://git.yoctoproject.org/git/poky
-    layers: meta, meta-poky, meta-yocto-bsp
-    branch: warrior
+  URI: http://git.openembedded.org/meta-openembedded
+  layers: meta-oe, meta-python, meta-networking
+  branch: zeus
 
-    URI: http://git.openembedded.org/meta-openembedded
-    layers: meta-oe, meta-python, meta-networking
-    branch: warrior
-
-3. Patches
-==========
+Patches
+=======
 Please submit any patches against the meta-ntpserver layer to the maintainer.
 
 Maintainer: Thomas Stewart <thomas@stewarts.org.uk>
 
-4. Using 
-========
-In order to use this layer, you need to make the build system aware of it.
+Using 
+=====
+This layer is designed to be used to create the end image for a galleon ntp appliance and thus it contains both distro and machine information and thus will probably not be useful to re-use else where.
 
-Assuming the meta-ntpserver layer exists at the top-level of your yocto build tree, you can add it to the build system by adding the location of the meta-ntpserver layer to bblayers.conf, along with any other layers needed. e.g.:
+To use this the base and dependency repos needs to be created:
 
-    BBLAYERS ?= " \
-        /path/to/yocto/meta \
-        /path/to/yocto/meta-poky \
-        /path/to/yocto/meta-yocto-bsp \
-        /path/to/yocto/meta-openembedded/meta-oe \
-        /path/to/yocto/meta-openembedded/meta-python \
-        /path/to/yocto/meta-openembedded/meta-networking \
-        /path/to/yocto/meta-meta-ntpserver \
-        "
+  git clone http://git.yoctoproject.org/git/poky -b zeus
+  cd poky
+  git clone http://git.openembedded.org/meta-openembedded -b zeus
+  git clone https://github.com/thomasdstewart/meta-ntpsever.git
+  . oe-init-build-env
+  bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
+  bitbake-layers add-layer $PWD/../meta-openembedded/meta-python
+  bitbake-layers add-layer $PWD/../meta-openembedded/meta-networking
+  bitbake-layers add-layer $PWD/../meta-ntpserver
 
 This adds an image called ntpserver-image. It expects some configuration to be defined in build/conf/local.conf. Add the following to local.conf:
 
-    MACHINE = "galleon"
-    DISTRO = "ntpserver
-    ROOT_PASSWORD = "my_password_for_root_ssh"
+  echo 'MACHINE = "galleon"' >> conf/local.conf
+  echo 'DISTRO = "ntpserver"' >> conf/local.conf
+  echo 'ROOT_PASSWORD = "password"' >> conf/local.conf
 
-Then run "bitbake ntpserver-image" and it should produce a working image.
+To build run:
 
-5. Example Build
-================
-git clone http://git.yoctoproject.org/git/poky -b warrior
-cd poky
-git clone http://git.openembedded.org/meta-openembedded -b warrior
-git clone https://github.com/thomasdstewart/meta-ntpsever.git
-. oe-init-build-env
-bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
-bitbake-layers add-layer $PWD/../meta-openembedded/meta-python
-bitbake-layers add-layer $PWD/../meta-openembedded/meta-networking
-bitbake-layers add-layer $PWD/../meta-ntpserver
+   bitbake ntpserver-image
 
-echo 'MACHINE = "galleon"' >> conf/local.conf
-echo 'DISTRO = "ntpserver"' >> conf/local.conf
-echo 'ROOT_PASSWORD = "password"' >> conf/local.conf
+It should produce a working image located in the build dir here:
 
-bitbake ntpserver-image
+  tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon-*.rootfs.wic
+
+To test this with qemu the following can be used
+  runqemu wic
+
+Which runs something like:
+  build/tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -drive if=none,id=hd,file=/home/thomas/src/poky/build/tmp/deploy/images/galleon/ntpserver-image-galleon-20191125155022.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -no-reboot -show-cursor   -cpu pentium2 -m 256 -serial mon:vc -serial null 
+
+Hardware
+========
+Galleon Motherboard: VIA EPIA EK 
+http://cdn.viaembedded.com/eol_products/docs/epia-ek/datasheet/VIA+EPIA+EK_datasheet_v090217.pdf
+
+LCD seems to be HD44780 clone
+https://uk.rs-online.com/web/p/lcd-monochrome-displays/7200222/
+https://cdn.sparkfun.com/assets/9/d/4/e/f/SerLCD_v2_5ApplicationNote_r1_2.pdf
+
+Links
+=====
+Yocto Project Development Tasks Manual
+https://www.yoctoproject.org/docs/3.0/dev-manual/dev-manual.html
+
+Yocto Project Reference Manual
+https://www.yoctoproject.org/docs/3.0/ref-manual/ref-manual.html
+
+Yocto Project Board Support Package (BSP) Developer's Guide
+https://www.yoctoproject.org/docs/3.0/bsp-guide/bsp-guide.html
+
+cgit of poky
+http://git.yoctoproject.org/cgit.cgi/poky/tree/
+
+cgit of meta-openembedded
+http://git.openembedded.org/meta-openembedded/tree/
+
+TODO
+====
+network?
+gpsmon
+lspci
+/boot should be ro (overide in fstab?)
+customize hostname
+no nic driver
+configure firewalld
+
+Random Links
+============
+https://stackoverflow.com/questions/40020980/installing-grub2-in-yocto-rootfs
+https://wiki.yoctoproject.org/wiki/TipsAndTricks/Running_YP_Image_On_AWS
+http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/classes/bootimg.bbclass?h=green
+https://www.foobarflies.io/starting-with-yocto/
+https://elinux.org/How_to_make_a_yocto_rootfs_for_MIPS_CI20
+http://git.yoctoproject.org/cgit/cgit.cgi/poky/tree/meta/conf/machine/include/tune-c3.inc
+https://embexus.com/2016/12/27/create-a-custom-linux-distribution-using-yocto/
+https://www.imx6rex.com/open-rex/software/yocto-meta-layer-how-to-add-support-for-a-custom-board-or-openrex/
+https://wiki.netbsd.org/tutorials/how_to_setup_virtio_scsi_with_qemu/
+https://kdave.github.io/qemu-2.11-if=scsi/
+

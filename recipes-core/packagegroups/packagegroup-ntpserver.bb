@@ -6,9 +6,10 @@ inherit packagegroup
 
 RDEPENDS_${PN} = "\
     firewalld \
+    gpsd \
     ntp \
     ntpdate \
     ntpq \
-    gpsd \
+    pciutils \
 "
 #    firewall \
