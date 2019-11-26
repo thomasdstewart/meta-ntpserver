@@ -5,5 +5,3 @@ SRC_URI += "file://fstab"
 do_install_append() {
     install -m 0644 ${WORKDIR}/fstab ${D}${sysconfdir}/fstab
 }
-
-hostname = "galleon"

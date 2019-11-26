@@ -21,7 +21,7 @@ Maintainer: Thomas Stewart <thomas@stewarts.org.uk>
 
 Using 
 =====
-This layer is designed to be used to create the end image for a galleon ntp appliance and thus it contains both distro and machine information and thus will probably not be useful to re-use else where.
+This layer is designed to be used to create the end image for a galleon ntp appliance and thus it contains both distro and machine information and thus will probably not be useful to re-use elsewhere.
 
 To use this the base and dependency repos needs to be created:
 
@@ -40,6 +40,9 @@ This adds an image called ntpserver-image. It expects some configuration to be d
   echo 'MACHINE = "galleon"' >> conf/local.conf
   echo 'DISTRO = "ntpserver"' >> conf/local.conf
   echo 'ROOT_PASSWORD = "password"' >> conf/local.conf
+  echo 'hostname_pn-base-files = "ntpserver"' >> conf/local.conf
+
+Modify the meta-ntpserver/recipes-core/server/ntp.conf file to suite needs
 
 To build run:
 
@@ -47,13 +50,33 @@ To build run:
 
 It should produce a working image located in the build dir here:
 
-  tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon-*.rootfs.wic
+  tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic
 
 To test this with qemu the following can be used
   runqemu wic
 
 Which runs something like:
-  build/tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -drive if=none,id=hd,file=/home/thomas/src/poky/build/tmp/deploy/images/galleon/ntpserver-image-galleon-20191125155022.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -no-reboot -show-cursor   -cpu pentium2 -m 256 -serial mon:vc -serial null 
+  build/tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -drive if=none,id=hd,file=/home/thomas/src/poky/build/tmp/deploy/images/galleon/ntpserver-image-galleon-20191125155022.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -no-reboot -show-cursor -cpu pentium2 -m 256 -serial mon:vc -serial null 
+
+Which can be written to a USB stick with something like:
+  pv tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic | sudo dd bs=1M of=/dev/sdb
+
+Once booted from the USB sticl on the real hardware dd the usb to the onboard compact flash with something like:
+  dd if=/dev/sdb of=/dev/sda_remove_ bs=1M count=200
+
+Post install modifications can be made by remounting rw
+  mount -o remount,rw /
+  # do modification
+  mount -o remount,ro /
+
+Static IP's can be configured to override /lib/systemd/network/80-wired.network in /etc/systemd/network/0-wired.network to override like:
+  [Match]
+  Name=en*
+
+  [Network]
+  Address=192.168.0.10/24
+  Gateway=192.168.0.1
+  DNS=192.168.0.1
 
 Hardware
 ========
@@ -81,26 +104,20 @@ http://git.yoctoproject.org/cgit.cgi/poky/tree/
 cgit of meta-openembedded
 http://git.openembedded.org/meta-openembedded/tree/
 
+OpenEmbedded Layer Index
+https://layers.openembedded.org/
+
+YOCTO Meta-layer: How to add support for a custom board (or OpenRex)
+https://www.imx6rex.com/open-rex/software/yocto-meta-layer-how-to-add-support-for-a-custom-board-or-openrex/
+
 TODO
 ====
-network?
-gpsmon
-lspci
-/boot should be ro (overide in fstab?)
-customize hostname
-no nic driver
-configure firewalld
+/boot should be ro, fstab uses sda1 as /boot
 
 Random Links
 ============
-https://stackoverflow.com/questions/40020980/installing-grub2-in-yocto-rootfs
 https://wiki.yoctoproject.org/wiki/TipsAndTricks/Running_YP_Image_On_AWS
-http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/classes/bootimg.bbclass?h=green
 https://www.foobarflies.io/starting-with-yocto/
 https://elinux.org/How_to_make_a_yocto_rootfs_for_MIPS_CI20
-http://git.yoctoproject.org/cgit/cgit.cgi/poky/tree/meta/conf/machine/include/tune-c3.inc
 https://embexus.com/2016/12/27/create-a-custom-linux-distribution-using-yocto/
-https://www.imx6rex.com/open-rex/software/yocto-meta-layer-how-to-add-support-for-a-custom-board-or-openrex/
-https://wiki.netbsd.org/tutorials/how_to_setup_virtio_scsi_with_qemu/
-https://kdave.github.io/qemu-2.11-if=scsi/
 

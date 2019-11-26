@@ -3,7 +3,7 @@ Description=LCD Status
 
 [Service] 
 Type=simple
-ExecStart=/sbin/lcdstatus
+ExecStart=/usr/bin/lcdstatus
 
 [Install]
 WantedBy=basic.target

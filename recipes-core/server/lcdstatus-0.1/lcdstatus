@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 set -eu
 test -c /dev/ttyS2 || exit
 
 while true; do
-        datetime="$(date --rfc-3339=seconds | cut -c 1-19)"
-        sysstatus="$(systemctl is-system-running | cut -c1)"
-        ip="$(ip addres show eth0 | awk -F"[ /]+" '/inet / { print $3}')"
+        datetime="$(date +'%Y-%m-%d %H:%M')"
+        sysstatus="$(systemctl is-system-running | cut -c1-3)"
+        ip="$(ip -o addr | awk -F"[ /]+"  '/ e.* inet /{print $4}')"
         offset="$(ntpq -p 2> /dev/null | awk '/SHM/ {print $9}')"
-        printf "\xfe\x01%s%s\xfe\xc0%s %s" "$datetime" "$sysstatus" "$ip" "$offset" > /dev/ttyS2
+        printf "\xfe\x01%s %s\xfe\xc0%s %s" "$datetime" "$sysstatus" "$ip" "$offset" > /dev/ttyS2
         sleep 1
 done

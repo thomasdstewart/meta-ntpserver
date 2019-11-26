@@ -9,5 +9,5 @@ LINUX_VERSION_galleon = "${LINUX_VERSION_genericx86}"
 #KERNEL_FEATURES_remove = "cfg/sound.scc"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-SRC_URI += "file://net.cfg"
+SRC_URI += "file://via.cfg"
 
