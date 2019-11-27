@@ -13,5 +13,3 @@ RDEPENDS_${PN} = "\
     ntpq \
     pciutils \
 "
-#    firewalld \
-#   python3-six \

@@ -1,4 +1,3 @@
 #copied from poky/scripts/lib/wic/canned-wks/directdisk.wks
 include common.wks.inc
-#bootloader --timeout=0 --append="rootwait rootfstype=ext4 console=tty0 console=ttyS0,115200n8"
-bootloader --timeout=0 --append="rootwait rootfstype=ext4 console=tty0"
+bootloader --timeout=0 --append="rootwait rootfstype=ext4 console=tty0 console=ttyS0,9600n8"
