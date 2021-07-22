@@ -1,0 +1,3 @@
+/dev/sda2 /             auto  ro,defaults 0 0
+/dev/sda1 /boot	        vfat  ro,defaults 0 0
+tmpfs     /var/volatile tmpfs defaults    0 0

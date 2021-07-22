@@ -7,11 +7,11 @@ Dependencies
 
   URI: http://git.yoctoproject.org/git/poky
   layers: meta, meta-poky, meta-yocto-bsp
-  branch: zeus
+  branch: hardknott
 
   URI: http://git.openembedded.org/meta-openembedded
   layers: meta-oe, meta-python, meta-networking
-  branch: zeus
+  branch: hardknott
 
 Patches
 =======
@@ -25,10 +25,10 @@ This layer is designed to be used to create the end image for a galleon ntp appl
 
 To use this the base and dependency repos needs to be created:
 
-  git clone http://git.yoctoproject.org/git/poky -b zeus
+  git clone http://git.yoctoproject.org/git/poky -b hardknott
   cd poky
-  git clone http://git.openembedded.org/meta-openembedded -b zeus
-  git clone https://github.com/thomasdstewart/meta-ntpsever.git
+  git clone http://git.openembedded.org/meta-openembedded -b hardknott
+  git clone https://github.com/thomasdstewart/meta-ntpserver.git
   . oe-init-build-env
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-python
@@ -53,7 +53,7 @@ It should produce a working image located in the build dir here:
   tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic
 
 To test this with qemu the following can be used
-  runqemu wic
+  runqemu wic nographic
 
 Which runs something like:
   build/tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -drive if=none,id=hd,file=/home/thomas/src/poky/build/tmp/deploy/images/galleon/ntpserver-image-galleon-20191125155022.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -no-reboot -show-cursor -cpu pentium2 -m 256 -serial mon:vc -serial null 

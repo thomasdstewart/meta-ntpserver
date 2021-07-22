@@ -1,4 +1,4 @@
-#meta-yocto-bsp/recipes-kernel/linux/linux-yocto_5.2.bbappend
+#meta-yocto-bsp/recipes-kernel/linux/linux-yocto_5.10.bbappend
 KBRANCH_galleon = "${KBRANCH_genericx86}"
 KMACHINE_galleon = "${KMACHINE_genericx86}"
 SRCREV_machine_galleon = "${SRCREV_machine_genericx86}"
@@ -9,3 +9,4 @@ KERNEL_FEATURES_remove = "cfg/sound.scc"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 SRC_URI += "file://via.cfg"
+
