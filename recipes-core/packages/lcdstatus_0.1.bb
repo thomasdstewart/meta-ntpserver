@@ -8,12 +8,15 @@ S = "${WORKDIR}"
 
 inherit systemd
 
-SYSTEMD_SERVICE_${PN} = "lcdstatus.service"
+SYSTEMD_SERVICE:${PN} = "lcdstatus.service"
+
+FILES:${PN} = "${systemd_unitdir}/system/lcdstatus.service \
+               ${bindir}/lcdstatus"
 
 do_install() {
-    install -d ${D}${systemd_unitdir}/system/
-    install -m 0644 ${PN}.service ${D}${systemd_unitdir}/system
+    install -d "${D}${systemd_unitdir}/system/"
+    install -m 0644 "${PN}.service" "${D}${systemd_unitdir}/system"
 
-    install -d ${D}${bindir}
-    install -m 0755 lcdstatus ${D}${bindir}
+    install -d "${D}${bindir}"
+    install -m 0755 lcdstatus "${D}${bindir}"
 }

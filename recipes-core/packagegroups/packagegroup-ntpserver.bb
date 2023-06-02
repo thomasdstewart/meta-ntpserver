@@ -4,12 +4,13 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 inherit packagegroup
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     gpsd \
     iptables \
     lcdstatus \
+    netcat-openbsd \
     ntp \
-    ntpdate \
     ntpq \
     pciutils \
+    util-linux-lsblk \
 "

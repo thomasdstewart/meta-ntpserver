@@ -7,11 +7,11 @@ Dependencies
 
   URI: http://git.yoctoproject.org/git/poky
   layers: meta, meta-poky, meta-yocto-bsp
-  branch: hardknott
+  branch: mickledore
 
   URI: http://git.openembedded.org/meta-openembedded
   layers: meta-oe, meta-python, meta-networking
-  branch: hardknott
+  branch: mickledore
 
 Patches
 =======
@@ -21,13 +21,13 @@ Maintainer: Thomas Stewart <thomas@stewarts.org.uk>
 
 Using 
 =====
-This layer is designed to be used to create the end image for a galleon ntp appliance and thus it contains both distro and machine information and thus will probably not be useful to re-use elsewhere.
+This layer contains both a distro (ntpserver) and machine (gallean). It's desgined to ceate an eng image for a galleon ntp appliance. However further machines could be added.
 
 To use this the base and dependency repos needs to be created:
 
-  git clone http://git.yoctoproject.org/git/poky -b hardknott
+  git clone http://git.yoctoproject.org/git/poky -b mickledore
   cd poky
-  git clone http://git.openembedded.org/meta-openembedded -b hardknott
+  git clone http://git.openembedded.org/meta-openembedded -b mickledore
   git clone https://github.com/thomasdstewart/meta-ntpserver.git
   . oe-init-build-env
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
@@ -39,10 +39,10 @@ This adds an image called ntpserver-image. It expects some configuration to be d
 
   echo 'MACHINE = "galleon"' >> conf/local.conf
   echo 'DISTRO = "ntpserver"' >> conf/local.conf
-  echo 'ROOT_PASSWORD = "password"' >> conf/local.conf
+  echo 'ROOT_PASSWORD_HASH = "\$5\$XdEvu3X0DbgNUKqa\$AeAvbpYFcve1nRKoDnXCCRB8Mu8USDQ0Yxqdac94Qq6"' >> conf/local.conf
   echo 'hostname_pn-base-files = "ntpserver"' >> conf/local.conf
 
-Modify the meta-ntpserver/recipes-core/server/ntp.conf file to suite needs
+Password hashes can be set with: "printf "%q" $(mkpasswd -m sha256crypt password)". Modify the meta-ntpserver/recipes-core/server/ntp.conf file to suite needs.
 
 To build run:
 
@@ -52,11 +52,12 @@ It should produce a working image located in the build dir here:
 
   tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic
 
-To test this with qemu the following can be used
+To test this with qemu the following can be used:
+  runqemu-gen-tapdevs # following advice to run sudo runqemu-gen-tapdevs
   runqemu wic nographic
 
 Which runs something like:
-  build/tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -drive if=none,id=hd,file=/home/thomas/src/poky/build/tmp/deploy/images/galleon/ntpserver-image-galleon-20191125155022.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -no-reboot -show-cursor -cpu pentium2 -m 256 -serial mon:vc -serial null 
+  tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -drive if=none,id=hd,file=build/tmp/deploy/images/galleon/ntpserver-image-galleon-20230602072302.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -m 256 -serial mon:stdio -serial null -nographic
 
 Which can be written to a USB stick with something like:
   pv tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic | sudo dd bs=1M of=/dev/sdb
@@ -91,14 +92,22 @@ To test gps, telnet to localhost port  2947 and type "?WATCH={"enable":true,"jso
   {"class":"TPV","device":"/dev/ttyS1","mode":2,"time":"2019-11-28T17:50:10.000Z","ept":0.005,"lat":51.594600000,"lon":-0.254028333,"track":38.9000,"speed":0.000}
 
 
-Hardware
+Galleon Hardware
 ========
 Galleon Motherboard: VIA EPIA EK 
 http://cdn.viaembedded.com/eol_products/docs/epia-ek/datasheet/VIA+EPIA+EK_datasheet_v090217.pdf
 
+Escape after bios beep loads boot menu
+Delete after bios beep gets into the bios
+tapping cap lock on during post pauses the systlinux menu
+
 LCD seems to be HD44780 clone
 https://uk.rs-online.com/web/p/lcd-monochrome-displays/7200222/
 https://cdn.sparkfun.com/assets/9/d/4/e/f/SerLCD_v2_5ApplicationNote_r1_2.pdf
+
+TODO
+====
+ * switch to ntpsec - existing packge depends on x11
 
 Links
 =====
@@ -122,10 +131,6 @@ https://layers.openembedded.org/
 
 YOCTO Meta-layer: How to add support for a custom board (or OpenRex)
 https://www.imx6rex.com/open-rex/software/yocto-meta-layer-how-to-add-support-for-a-custom-board-or-openrex/
-
-TODO
-====
-/boot should be ro, fstab uses sda1 as /boot
 
 Random Links
 ============

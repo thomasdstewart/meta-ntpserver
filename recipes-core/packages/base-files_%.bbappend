@@ -1,9 +1,7 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/base-files:"
+FILESEXTRAPATHS:prepend = "${THISDIR}/base-files:"
 
-SRC_URI += " \
-    file://fstab \
-"
+SRC_URI:append = " file://fstab"
 
-do_install_append() {
+do_install:append() {
     install -m 0644 ${WORKDIR}/fstab ${D}${sysconfdir}/fstab
 }

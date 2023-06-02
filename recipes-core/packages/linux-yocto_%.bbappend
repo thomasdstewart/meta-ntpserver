@@ -1,12 +1,11 @@
-#meta-yocto-bsp/recipes-kernel/linux/linux-yocto_5.10.bbappend
-KBRANCH_galleon = "${KBRANCH_genericx86}"
-KMACHINE_galleon = "${KMACHINE_genericx86}"
-SRCREV_machine_galleon = "${SRCREV_machine_genericx86}"
-COMPATIBLE_MACHINE_galleon = "galleon"
-LINUX_VERSION_galleon = "${LINUX_VERSION_genericx86}"
+#meta-yocto-bsp/recipes-kernel/linux/linux-yocto_6.1.bbappend
+KBRANCH:galleon = "${KBRANCH:genericx86}"
+KMACHINE:galleon = "${KMACHINE:genericx86}"
+SRCREV_machine:galleon = "${SRCREV_machine:genericx86}"
+COMPATIBLE_MACHINE:galleon = "galleon"
+LINUX_VERSION:galleon = "${LINUX_VERSION:genericx86}"
 
-KERNEL_FEATURES_remove = "cfg/sound.scc"
+KERNEL_FEATURES:remove = "cfg/sound.scc"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-SRC_URI += "file://via.cfg"
-
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+SRC_URI:append = " file://via.cfg"

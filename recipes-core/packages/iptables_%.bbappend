@@ -1,9 +1,8 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/iptables:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/iptables:"
 
-SRC_URI += " \
-    file://rules \
-"
-do_install_append() {
-    install -m 0644 ${WORKDIR}/rules ${D}${sysconfdir}/iptables/iptables.rules
+SRC_URI:append = " file://iptables.rules"
+
+do_install:append() {
+    install -m 0644 "${WORKDIR}/iptables.rules" \
+        "${D}${sysconfdir}/iptables/iptables.rules"
 }
-
