@@ -1,0 +1,33 @@
+name: build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout meta-ntpserver cibuild branch
+      uses: actions/checkout@v3
+
+    - name: Clone
+      run: |
+        git clone http://git.yoctoproject.org/git/poky -b mickledore
+        git clone http://git.openembedded.org/meta-openembedded -b mickledore
+        git clone https://github.com/thomasdstewart/meta-ntpserver.git
+
+    - name: Build Yocto Rootfs
+      run: |
+        source poky/oe-init-build-env .
+        bitbake ntpserver-image
+
+    - name: Compress the output images
+      run: |
+        tar -czvf images.tar.gz -C ./tmp/deploy/images/galleon .
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: images
+        path: images.tar.gz
+        retention-days: 1
+
