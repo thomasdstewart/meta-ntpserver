@@ -9,6 +9,11 @@ jobs:
     - name: Checkout meta-ntpserver cibuild branch
       uses: actions/checkout@v3
 
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install chrpath diffstat
+
     - name: Clone
       run: |
         git clone http://git.yoctoproject.org/git/poky -b mickledore
