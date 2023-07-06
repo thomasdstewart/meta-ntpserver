@@ -108,6 +108,13 @@ https://cdn.sparkfun.com/assets/9/d/4/e/f/SerLCD_v2_5ApplicationNote_r1_2.pdf
 TODO
 ====
  * switch to ntpsec - existing packge depends on x11
+ * OTA updates
+   * https://wiki.yoctoproject.org/wiki/System_Update
+   * https://github.com/sbabic/meta-swupdate
+   * https://github.com/sbabic/meta-swupdate-boards
+   * https://github.com/sbabic/meta-swupdate-boards
+   * https://stackoverflow.com/questions/60724524/step-by-step-walk-through-on-how-to-use-swupdate-on-raspberry-pi-or-any-embedded
+   * https://stackoverflow.com/questions/66873032/meta-swupdate-yocto-gub-instead-of-u-boot-bootloader
 
 Links
 =====
