@@ -25,6 +25,7 @@ This layer contains both a distro (ntpserver) and machine (gallean). It's desgin
 
 To use this the base and dependency repos needs to be created:
 
+```sh
   git clone http://git.yoctoproject.org/git/poky -b mickledore
   cd poky
   git clone http://git.openembedded.org/meta-openembedded -b mickledore
@@ -34,13 +35,16 @@ To use this the base and dependency repos needs to be created:
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-python
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-networking
   bitbake-layers add-layer $PWD/../meta-ntpserver
+```
 
 This adds an image called ntpserver-image. It expects some configuration to be defined in build/conf/local.conf. Add the following to local.conf:
 
+```sh
   echo 'MACHINE = "galleon"' >> conf/local.conf
   echo 'DISTRO = "ntpserver"' >> conf/local.conf
   echo 'ROOT_PASSWORD_HASH = "\$5\$XdEvu3X0DbgNUKqa\$AeAvbpYFcve1nRKoDnXCCRB8Mu8USDQ0Yxqdac94Qq6"' >> conf/local.conf
   echo 'hostname_pn-base-files = "ntpserver"' >> conf/local.conf
+```
 
 Password hashes can be set with: "printf "%q" $(mkpasswd -m sha256crypt password)". Modify the meta-ntpserver/recipes-core/server/ntp.conf file to suite needs.
 
