@@ -24,7 +24,6 @@ Using
 This layer contains both a distro (ntpserver) and machine (gallean). It's desgined to ceate an eng image for a galleon ntp appliance. However further machines could be added.
 
 To use this the base and dependency repos needs to be created:
-
 ```sh
   git clone http://git.yoctoproject.org/git/poky -b mickledore
   cd poky
@@ -38,7 +37,6 @@ To use this the base and dependency repos needs to be created:
 ```
 
 This adds an image called ntpserver-image. It expects some configuration to be defined in build/conf/local.conf. Add the following to local.conf:
-
 ```sh
   echo 'MACHINE = "galleon"' >> conf/local.conf
   echo 'DISTRO = "ntpserver"' >> conf/local.conf
@@ -49,8 +47,9 @@ This adds an image called ntpserver-image. It expects some configuration to be d
 Password hashes can be set with: "printf "%q" $(mkpasswd -m sha256crypt password)". Modify the meta-ntpserver/recipes-core/server/ntp.conf file to suite needs.
 
 To build run:
-
+```sh
    bitbake ntpserver-image
+```
 
 It should produce a working image located in the build dir here:
 
