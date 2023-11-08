@@ -52,28 +52,40 @@ To build run:
 ```
 
 It should produce a working image located in the build dir here:
-
+```sh
   tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic
+```
 
 To test this with qemu the following can be used:
+```sh
   runqemu-gen-tapdevs # following advice to run sudo runqemu-gen-tapdevs
   runqemu wic nographic
+```
 
 Which runs something like:
+```sh
   tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -drive if=none,id=hd,file=build/tmp/deploy/images/galleon/ntpserver-image-galleon-20230602072302.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -m 256 -serial mon:stdio -serial null -nographic
+```
 
 Which can be written to a USB stick with something like:
+```sh
   pv tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic | sudo dd bs=1M of=/dev/sdb
+```
 
 Once booted from the USB sticl on the real hardware dd the usb to the onboard compact flash with something like:
+```sh
   dd if=/dev/sdb of=/dev/sda_remove_ bs=1M count=200
+```
 
 Post install modifications can be made by remounting rw
+```sh
   mount -o remount,rw /
   # do modification
   mount -o remount,ro /
+```
 
 Static IP's can be configured to override /lib/systemd/network/80-wired.network in /etc/systemd/network/0-wired.network to override like:
+```sh
   [Match]
   Name=en*
 
@@ -81,9 +93,10 @@ Static IP's can be configured to override /lib/systemd/network/80-wired.network 
   Address=192.168.0.10/24
   Gateway=192.168.0.1
   DNS=192.168.0.1
+```
 
 To test gps, telnet to localhost port  2947 and type "?WATCH={"enable":true,"json":true};", eg
-
+```sh
   # telnet localhost 2947
   Connected to localhost
   {"class":"VERSION","release":"3.19","rev":"3.19","proto_major":3,"proto_minor":14}
@@ -93,7 +106,7 @@ To test gps, telnet to localhost port  2947 and type "?WATCH={"enable":true,"jso
   {"class":"TPV","device":"/dev/ttyS1","mode":2,"time":"2019-11-28T17:50:08.000Z","ept":0.005,"lat":51.594600000,"lon":-0.254036667,"track":38.9000,"speed":0.000}
   {"class":"TPV","device":"/dev/ttyS1","mode":2,"time":"2019-11-28T17:50:09.000Z","ept":0.005,"lat":51.594600000,"lon":-0.254031667,"track":38.9000,"speed":0.000}
   {"class":"TPV","device":"/dev/ttyS1","mode":2,"time":"2019-11-28T17:50:10.000Z","ept":0.005,"lat":51.594600000,"lon":-0.254028333,"track":38.9000,"speed":0.000}
-
+```
 
 Galleon Hardware
 ========
@@ -144,8 +157,8 @@ https://www.imx6rex.com/open-rex/software/yocto-meta-layer-how-to-add-support-fo
 
 Random Links
 ============
-https://wiki.yoctoproject.org/wiki/TipsAndTricks/Running_YP_Image_On_AWS
-https://www.foobarflies.io/starting-with-yocto/
-https://elinux.org/How_to_make_a_yocto_rootfs_for_MIPS_CI20
-https://embexus.com/2016/12/27/create-a-custom-linux-distribution-using-yocto/
+ * https://wiki.yoctoproject.org/wiki/TipsAndTricks/Running_YP_Image_On_AWS
+ * https://www.foobarflies.io/starting-with-yocto/
+ * https://elinux.org/How_to_make_a_yocto_rootfs_for_MIPS_CI20
+ * https://embexus.com/2016/12/27/create-a-custom-linux-distribution-using-yocto/
 
