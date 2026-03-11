@@ -1,4 +1,4 @@
-#meta-yocto-bsp/recipes-kernel/linux/linux-yocto_6.1.bbappend
+#meta-yocto-bsp/recipes-kernel/linux/linux-yocto_6.6.bbappend
 KBRANCH:galleon = "${KBRANCH:genericx86}"
 KMACHINE:galleon = "${KMACHINE:genericx86}"
 SRCREV_machine:galleon = "${SRCREV_machine:genericx86}"

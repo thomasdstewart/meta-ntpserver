@@ -2,7 +2,7 @@
 set -eu
 test -c /dev/ttyS2 || exit
 
-s='-\|/'
+s='.oOo'
 i=0
 while true; do
     time="$(date +'%H:%M')"

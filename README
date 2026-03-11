@@ -5,13 +5,13 @@ This README file contains information on the contents of the meta-ntpserver laye
 Dependencies
 ============
 
-  URI: http://git.yoctoproject.org/git/poky
+  URI: https://git.yoctoproject.org/poky
   layers: meta, meta-poky, meta-yocto-bsp
-  branch: mickledore
+  branch: scarthgap
 
-  URI: http://git.openembedded.org/meta-openembedded
+  URI: https://git.openembedded.org/meta-openembedded
   layers: meta-oe, meta-python, meta-networking
-  branch: mickledore
+  branch: scarthgap
 
 Patches
 =======
@@ -21,13 +21,13 @@ Maintainer: Thomas Stewart <thomas@stewarts.org.uk>
 
 Using 
 =====
-This layer contains both a distro (ntpserver) and machine (gallean). It's desgined to ceate an eng image for a galleon ntp appliance. However further machines could be added.
+This layer contains both a distro (ntpserver) and machine (gallean). It's desgined to create an image for a galleon ntp appliance. However further machines could be added.
 
 To use this the base and dependency repos needs to be created:
 ```sh
-  git clone http://git.yoctoproject.org/git/poky -b mickledore
+  git clone https://git.yoctoproject.org/poky -b scarthgap
   cd poky
-  git clone http://git.openembedded.org/meta-openembedded -b mickledore
+  git clone https://git.openembedded.org/meta-openembedded -b scarthgap
   git clone https://github.com/thomasdstewart/meta-ntpserver.git
   . oe-init-build-env
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
@@ -51,28 +51,28 @@ To build run:
    bitbake ntpserver-image
 ```
 
-It should produce a working image located in the build dir here:
+It should produce a working image located here:
 ```sh
-  tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic
+  tmp/work/galleon-poky-linux/ntpserver-image/1.0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.rootfs.wic
 ```
 
 To test this with qemu the following can be used:
 ```sh
-  runqemu-gen-tapdevs # following advice to run sudo runqemu-gen-tapdevs
+  runqemu-gen-tapdevs # following advice to run with sudo
   runqemu wic nographic
 ```
 
 Which runs something like:
 ```sh
-  tmp/work/x86_64-linux/qemu-helper-native/1.0-r1/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -drive if=none,id=hd,file=build/tmp/deploy/images/galleon/ntpserver-image-galleon-20230602072302.rootfs.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -m 256 -serial mon:stdio -serial null -nographic
+  tmp/work/x86_64-linux/qemu-helper-native/1.0/recipe-sysroot-native/usr/bin/qemu-system-i386 -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:02 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -drive if=none,id=hd,file=/home/thomas/poky/build/tmp/deploy/images/galleon/ntpserver-image-galleon.rootfs-20260310114648.wic,format=raw -device virtio-scsi-pci,id=scsi -device scsi-hd,drive=hd -m 256 -serial mon:stdio -serial null -nographic
 ```
 
 Which can be written to a USB stick with something like:
 ```sh
-  pv tmp/work/galleon-poky-linux/ntpserver-image/1.0-r0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.wic | sudo dd bs=1M of=/dev/sdb
+  pv tmp/work/galleon-poky-linux/ntpserver-image/1.0/deploy-ntpserver-image-image-complete/ntpserver-image-galleon.rootfs.wic | sudo dd bs=1M of=/dev/sdb
 ```
 
-Once booted from the USB sticl on the real hardware dd the usb to the onboard compact flash with something like:
+Once booted from the USB stick on the real hardware dd the usb to the onboard compact flash with something like:
 ```sh
   dd if=/dev/sdb of=/dev/sda_remove_ bs=1M count=200
 ```
@@ -113,9 +113,9 @@ Galleon Hardware
 Galleon Motherboard: VIA EPIA EK 
 http://cdn.viaembedded.com/eol_products/docs/epia-ek/datasheet/VIA+EPIA+EK_datasheet_v090217.pdf
 
-Escape after bios beep loads boot menu
-Delete after bios beep gets into the bios
-tapping cap lock on during post pauses the systlinux menu
+ * Escape after bios beep loads boot menu
+ * Delete after bios beep gets into the bios
+ * Tapping cap lock on during post pauses the syslinux menu
 
 LCD seems to be HD44780 clone
 https://uk.rs-online.com/web/p/lcd-monochrome-displays/7200222/
