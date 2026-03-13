@@ -36,6 +36,12 @@ To use this the base and dependency repos needs to be created:
   bitbake-layers add-layer $PWD/../meta-ntpserver
 ```
 
+If building on RHEL based install some deps
+```sh
+  dnf groupinstall "Development Tools"
+  dnf install chrpath  rpcgen wget lz4 mkpasswd perl-FindBin perl(open) vim pv
+```
+
 This adds an image called ntpserver-image. It expects some configuration to be defined in build/conf/local.conf. Add the following to local.conf:
 ```sh
   echo 'MACHINE = "galleon"' >> conf/local.conf
