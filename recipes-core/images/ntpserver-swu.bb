@@ -7,5 +7,5 @@ inherit swupdate
 SRC_URI = "file://sw-description"
 
 SWUPDATE_IMAGES = "ntpserver-image"
-SWUPDATE_IMAGES_FSTYPES[ntpserver-image] = ".ext4.gz"
+SWUPDATE_IMAGES_FSTYPES[ntpserver-image] = ".rootfs.ext4.gz"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[ntpserver-image] = "0"
