@@ -31,14 +31,14 @@ Use 4 partitions:
    - GRUB environment block (`grubenv`)
 2. `rootfsA` (ext4, ~200 MB, read-only runtime)
 3. `rootfsB` (ext4, ~200 MB, read-only runtime)
-4. `data` (ext4, remaining space)
+4. `srv` (ext4, remaining space, mounted at `/srv`)
    - optional persistent logs/state
    - update staging/marker files if needed
 
 Approximate footprint on a 1G disk:
 
 - 64M + 200M + 200M = 464M fixed
-- remainder available for `data` and filesystem overhead
+- remainder available for `srv` and filesystem overhead
 
 ### Kernel + GRUB update model
 
@@ -111,7 +111,7 @@ Replace current single-rootfs layout with explicit fixed-size partitions:
 - `boot` 64M
 - `rootfsA` 200M
 - `rootfsB` 200M
-- `data` rest
+- `srv` rest
 
 Use stable labels/PARTUUID references for both GRUB and SWUpdate logic.
 
