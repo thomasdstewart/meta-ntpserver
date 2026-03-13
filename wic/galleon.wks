@@ -1,3 +1,12 @@
-#copied from poky/scripts/lib/wic/canned-wks/directdisk.wks
-include common.wks.inc
-bootloader --timeout=0 --append="rootwait rootfstype=ext4 vga=0 console=tty0 console=ttyS0,115200n8"
+# A/B disk layout for galleon
+#  - boot    : 64MiB FAT32 with GRUB config/environment
+#  - rootfsA : 200MiB ext4 slot A
+#  - rootfsB : 200MiB ext4 slot B
+#  - data    : remainder ext4
+
+part /boot --source bootimg-pcbios --ondisk sda --fstype=vfat --label boot --active --align 1024 --size 64 --sourceparams="loader=grub-pc"
+part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsA --align 1024 --fixed-size 200M
+part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsB --align 1024 --fixed-size 200M
+part /data --ondisk sda --fstype=ext4 --label data --align 1024 --size 16
+
+bootloader --timeout=1 --append="rootwait rootfstype=ext4 vga=0 console=tty0 console=ttyS0,115200n8"

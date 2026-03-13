@@ -28,11 +28,13 @@ To use this the base and dependency repos needs to be created:
   git clone https://git.yoctoproject.org/poky -b scarthgap
   cd poky
   git clone https://git.openembedded.org/meta-openembedded -b scarthgap
+  git clone https://github.com/sbabic/meta-swupdate -b scarthgap
   git clone https://github.com/thomasdstewart/meta-ntpserver.git
   . oe-init-build-env
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-oe
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-python
   bitbake-layers add-layer $PWD/../meta-openembedded/meta-networking
+  bitbake-layers add-layer $PWD/../meta-swupdate
   bitbake-layers add-layer $PWD/../meta-ntpserver
 ```
 
@@ -55,6 +57,7 @@ Password hashes can be set with: "printf "%q" $(mkpasswd -m sha256crypt password
 To build run:
 ```sh
    bitbake ntpserver-image
+   bitbake ntpserver-swu
 ```
 
 It should produce a working image located here:
@@ -81,6 +84,13 @@ Which can be written to a USB stick with something like:
 Once booted from the USB stick on the real hardware dd the usb to the onboard compact flash with something like:
 ```sh
   dd if=/dev/sdb of=/dev/sda_remove_ bs=1M count=200
+```
+
+
+To install an update bundle from the running system (CLI v1 flow):
+```sh
+  ntpserver-swupdate-install.sh /path/to/ntpserver-swu-galleon.swu
+  reboot
 ```
 
 Post install modifications can be made by remounting rw
@@ -121,11 +131,15 @@ http://cdn.viaembedded.com/eol_products/docs/epia-ek/datasheet/VIA+EPIA+EK_datas
 
  * Escape after bios beep loads boot menu
  * Delete after bios beep gets into the bios
- * Tapping cap lock on during post pauses the syslinux menu
 
 LCD seems to be HD44780 clone
 https://uk.rs-online.com/web/p/lcd-monochrome-displays/7200222/
 https://cdn.sparkfun.com/assets/9/d/4/e/f/SerLCD_v2_5ApplicationNote_r1_2.pdf
+
+Update architecture
+===================
+
+A proposed SWUpdate A/B migration plan is documented in `docs/swupdate-ab-plan.md` (updated with concrete sizing and rollout decisions).
 
 TODO
 ====
