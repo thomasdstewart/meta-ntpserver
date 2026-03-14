@@ -1,17 +1,20 @@
 #!/bin/sh
 set -eu
 
-GRUBENV_BOOT="/boot/grub/grubenv"
-if [ ! -f "${GRUBENV_BOOT}" ]; then
-    exit 0
-fi
+BOOTCFG="/boot/syslinux.cfg"
+[ -f "$BOOTCFG" ] || exit 0
 
-. /etc/os-release || true
+slot_label=""
+for x in $(cat /proc/cmdline); do
+    case "$x" in
+        root=LABEL=rootfsA) slot_label="slotA" ;;
+        root=LABEL=rootfsB) slot_label="slotB" ;;
+    esac
+done
 
-if grub-editenv "${GRUBENV_BOOT}" list | grep -q '^upgrade_available=1$'; then
-    target_slot="$(grub-editenv "${GRUBENV_BOOT}" list | sed -n 's/^target_slot=//p')"
-    if [ -n "${target_slot}" ]; then
-        grub-editenv "${GRUBENV_BOOT}" set active_slot="${target_slot}"
-    fi
-    grub-editenv "${GRUBENV_BOOT}" set upgrade_available=0
-fi
+[ -n "$slot_label" ] || exit 0
+
+tmpcfg="$(mktemp)"
+sed "s/^DEFAULT .*/DEFAULT ${slot_label}/" "$BOOTCFG" > "$tmpcfg"
+cat "$tmpcfg" > "$BOOTCFG"
+rm -f "$tmpcfg"

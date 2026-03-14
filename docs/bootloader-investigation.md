@@ -40,12 +40,5 @@ Likely implementation options:
 
 ## Current repo stance
 
-- Current experiment switches to `WKS_FILE_DEPENDS_BOOTLOADERS:galleon = "grub grub-bootconf"` and patches `bootimg-pcbios.py` in `wic-tools` at build time to prefer GRUB defaults.
+- Current direction is to use syslinux intentionally and implement A/B switching with one-shot labels.
 - Keep the A/B partition layout and SWUpdate work intact.
-
-
-## Implemented first step
-
-A first in-layer override has been added via `recipes-devtools/wic-tools/wic-tools_%.bbappend`, which patches `bootimg-pcbios.py` during `wic-tools` configure to prefer GRUB loader defaults.
-
-This is intended to validate the override path without forking poky.

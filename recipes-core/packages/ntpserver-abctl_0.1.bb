@@ -1,4 +1,4 @@
-DESCRIPTION = "A/B slot control helpers for GRUB + SWUpdate"
+DESCRIPTION = "A/B slot control helpers for syslinux + SWUpdate"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
@@ -16,7 +16,7 @@ SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE:${PN} = "ntpserver-boot-ok.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
-RDEPENDS:${PN} = "bash coreutils grub swupdate util-linux-findmnt"
+RDEPENDS:${PN} = "bash coreutils syslinux swupdate util-linux-findmnt"
 
 FILES:${PN} += " \
     ${sbindir}/ntpserver-boot-ok.sh \

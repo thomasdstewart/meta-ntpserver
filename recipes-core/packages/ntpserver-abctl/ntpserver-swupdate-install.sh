@@ -7,8 +7,6 @@ if [ $# -ne 1 ]; then
 fi
 
 SWU="$1"
-GRUBENV_BOOT="/boot/grub/grubenv"
-
 if [ ! -f "$SWU" ]; then
     echo "Missing SWU file: $SWU" >&2
     exit 2
@@ -18,9 +16,11 @@ current_root="$(findmnt -n -o SOURCE / | sed 's#^/dev/##')"
 case "$current_root" in
     *2)
         target_slot=B
+        target_label=slotB
         ;;
     *3)
         target_slot=A
+        target_label=slotA
         ;;
     *)
         echo "Could not determine active slot from root source: $current_root" >&2
@@ -31,7 +31,11 @@ esac
 echo "Installing update to inactive slot ${target_slot}"
 swupdate -e "stable,slot${target_slot}" -i "$SWU"
 
-grub-editenv "$GRUBENV_BOOT" set target_slot="${target_slot}"
-grub-editenv "$GRUBENV_BOOT" set upgrade_available=1
+if command -v syslinux-setonce >/dev/null 2>&1; then
+    syslinux-setonce "${target_label}" || true
+fi
+if command -v extlinux >/dev/null 2>&1; then
+    extlinux --once "${target_label}" /boot
+fi
 
-echo "Update installed. Reboot to try slot ${target_slot}."
+echo "Update installed. Next boot set to ${target_label}."

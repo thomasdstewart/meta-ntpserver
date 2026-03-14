@@ -14,6 +14,6 @@ RDEPENDS:${PN} = "\
     pciutils \
     util-linux-lsblk \
     swupdate \
-    grub \
+    syslinux \
     ntpserver-abctl \
 "

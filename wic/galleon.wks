@@ -1,10 +1,10 @@
 # A/B disk layout for galleon
-#  - boot    : 64MiB FAT32 with GRUB config/environment
+#  - boot    : 64MiB FAT32 with syslinux config
 #  - rootfsA : 200MiB ext4 slot A
 #  - rootfsB : 200MiB ext4 slot B
 #  - srv     : remainder ext4 mounted at /srv
 
-part /boot --source bootimg-pcbios --ondisk sda --fstype=vfat --label boot --active --align 1024 --size 64 --sourceparams="loader=grub"
+part /boot --source bootimg-pcbios --ondisk sda --fstype=vfat --label boot --active --align 1024 --size 64
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsA --align 1024 --fixed-size 200M
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsB --align 1024 --fixed-size 200M
 part /srv --ondisk sda --fstype=ext4 --label srv --align 1024 --size 16

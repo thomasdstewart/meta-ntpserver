@@ -1,8 +1,8 @@
 [Unit]
-Description=Mark new A/B slot as healthy after successful boot
+Description=Mark new A/B slot as primary after successful boot
 After=multi-user.target
 Wants=multi-user.target
-ConditionPathExists=/boot/grub/grubenv
+ConditionPathExists=/boot/syslinux.cfg
 
 [Service]
 Type=oneshot
