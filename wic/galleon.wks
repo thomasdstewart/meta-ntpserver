@@ -9,4 +9,4 @@ part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsA --align 1024 -
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsB --align 1024 --fixed-size 200M
 part /srv --ondisk sda --fstype=ext4 --label srv --align 1024 --fixed-size 400M --no-fstab-update
 
-bootloader --timeout=1 --append="rootwait rootfstype=ext4 vga=0 console=tty0 console=ttyS0,115200n8"
+bootloader --timeout=1 --append="root=LABEL=rootfsA rootwait rootfstype=ext4 vga=0 console=tty0 console=ttyS0,115200n8 ro"
