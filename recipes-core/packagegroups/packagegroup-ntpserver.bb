@@ -11,6 +11,9 @@ RDEPENDS:${PN} = "\
     netcat-openbsd \
     ntp \
     ntpq \
+    ntpserver-abctl \
     pciutils \
+    swupdate \
+    syslinux \
     util-linux-lsblk \
 "

@@ -1,0 +1,24 @@
+software = {
+    version = "1.0";
+
+    galleon = {
+        stable = {
+            slotA = {
+                rootfs = {
+                    filename = "ntpserver-image-galleon.rootfs.ext4.gz";
+                    type = "raw";
+                    device = "/dev/disk/by-label/rootfsA";
+                    compressed = "zlib";
+                };
+            };
+            slotB = {
+                rootfs = {
+                    filename = "ntpserver-image-galleon.rootfs.ext4.gz";
+                    type = "raw";
+                    device = "/dev/disk/by-label/rootfsB";
+                    compressed = "zlib";
+                };
+            };
+        };
+    };
+}
