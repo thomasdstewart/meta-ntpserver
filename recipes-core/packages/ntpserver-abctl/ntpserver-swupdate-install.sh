@@ -12,18 +12,25 @@ if [ ! -f "$SWU" ]; then
     exit 2
 fi
 
-current_root="$(findmnt -n -o SOURCE / | sed 's#^/dev/##')"
-case "$current_root" in
-    *2)
+slot_label=""
+for x in $(cat /proc/cmdline); do
+    case "$x" in
+        root=LABEL=rootfsA) slot_label="slotA" ;;
+        root=LABEL=rootfsB) slot_label="slotB" ;;
+    esac
+done
+
+case "$slot_label" in
+    slotA)
         target_slot=B
         target_label=slotB
         ;;
-    *3)
+    slotB)
         target_slot=A
         target_label=slotA
         ;;
     *)
-        echo "Could not determine active slot from root source: $current_root" >&2
+        echo "Could not determine active slot from /proc/cmdline" >&2
         exit 1
         ;;
 esac
