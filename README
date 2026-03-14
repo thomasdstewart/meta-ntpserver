@@ -136,11 +136,6 @@ LCD seems to be HD44780 clone
 https://uk.rs-online.com/web/p/lcd-monochrome-displays/7200222/
 https://cdn.sparkfun.com/assets/9/d/4/e/f/SerLCD_v2_5ApplicationNote_r1_2.pdf
 
-Update architecture
-===================
-
-A proposed SWUpdate A/B migration plan is documented in `docs/swupdate-ab-plan.md` (updated with concrete sizing and rollout decisions).
-
 TODO
 ====
  * switch to ntpsec - existing packge depends on x11
