@@ -140,6 +140,7 @@ Update architecture
 ===================
 
 A proposed SWUpdate A/B migration plan is documented in `docs/swupdate-ab-plan.md` (updated with concrete sizing and rollout decisions).
+Bootloader investigation notes for the GRUB/syslinux PCBios behavior are in `docs/bootloader-investigation.md`.
 
 TODO
 ====
