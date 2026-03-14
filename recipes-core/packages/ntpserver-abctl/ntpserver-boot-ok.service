@@ -1,0 +1,12 @@
+[Unit]
+Description=Mark new A/B slot as primary after successful boot
+After=multi-user.target
+Wants=multi-user.target
+ConditionPathExists=/boot/syslinux.cfg
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/ntpserver-boot-ok.sh
+
+[Install]
+WantedBy=multi-user.target
