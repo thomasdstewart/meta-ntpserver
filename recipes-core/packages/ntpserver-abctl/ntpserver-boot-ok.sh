@@ -4,19 +4,19 @@ set -eu
 BOOTCFG="/boot/syslinux.cfg"
 [ -f "$BOOTCFG" ] || exit 0
 
-label=""
+slot=""
 for x in $(cat /proc/cmdline); do
     case "$x" in
-        root=LABEL=rootfsA)
-            label="slotA"
+        root=PARTUUID=*-02)
+            slot="slotA"
             ;;
-        root=LABEL=rootfsB)
-            label="slotB"
+        root=PARTUUID=*-03)
+            slot="slotB"
             ;;
     esac
 done
 
-[ -n "$label" ] || exit 0
+[ -n "$slot" ] || exit 0
 
 boot_was_ro=0
 boot_opts="$(awk '$2 == "/boot" { print $4; exit }' /proc/mounts || true)"
@@ -35,6 +35,6 @@ cleanup() {
 trap cleanup EXIT
 
 tmpcfg="$(mktemp)"
-sed "s/^DEFAULT .*/DEFAULT ${label}/" "$BOOTCFG" > "$tmpcfg"
+sed "s/^DEFAULT .*/DEFAULT ${slot}/" "$BOOTCFG" > "$tmpcfg"
 cat "$tmpcfg" > "$BOOTCFG"
 rm -f "$tmpcfg"

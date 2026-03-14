@@ -12,31 +12,31 @@ if [ ! -f "$SWU" ]; then
     exit 2
 fi
 
-label=""
+slot=""
 for x in $(cat /proc/cmdline); do
     case "$x" in
-        root=LABEL=rootfsA)
-            label="slotB"
+        root=PARTUUID=*-02)
+            slot="slotB"
             ;;
-        root=LABEL=rootfsB)
-            label="slotA"
+        root=PARTUUID=*-03)
+            slot="slotA"
             ;;
     esac
 done
 
-if [ -z "$label" ]; then
-    echo "Could not determine active label from /proc/cmdline" >&2
+if [ -z "$slot" ]; then
+    echo "Could not determine active slot from /proc/cmdline PARTUUID" >&2
     exit 1
 fi
 
-echo "Installing update to inactive label ${label}"
-swupdate -e "stable,${label}" -i "$SWU"
+echo "Installing update to inactive slot ${slot}"
+swupdate -e "stable,${slot}" -i "$SWU"
 
 if command -v syslinux-setonce >/dev/null 2>&1; then
-    syslinux-setonce "${label}" || true
+    syslinux-setonce "${slot}" || true
 fi
 if command -v extlinux >/dev/null 2>&1; then
-    extlinux --once "${label}" /boot
+    extlinux --once "${slot}" /boot
 fi
 
-echo "Update installed. Next boot set to ${label}."
+echo "Update installed. Next boot set to ${slot}."
