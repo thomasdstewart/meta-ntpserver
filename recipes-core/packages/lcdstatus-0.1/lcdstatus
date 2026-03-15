@@ -6,7 +6,8 @@ s='.oOo'
 i=0
 while true; do
     time="$(date +'%H:%M')"
-    throb="${s:$i:1}"
+    c=$(( i+1 ))
+    throb="$(echo $s | cut -c $c)"
     offset="$(ntpq -p 2> /dev/null | awk '/SHM/ {print $9}')"
     ip="$(ip -o addr | awk -F"[ /]+"  '/ e.* inet /{print $4}')"
     sysstatus="$(systemctl is-system-running | cut -c1-3)"
