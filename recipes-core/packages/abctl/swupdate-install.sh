@@ -15,12 +15,8 @@ fi
 slot=""
 for x in $(cat /proc/cmdline); do
     case "$x" in
-        root=PARTUUID=*-02)
-            slot="slotB"
-            ;;
-        root=PARTUUID=*-03)
-            slot="slotA"
-            ;;
+        label=slotA) slot="slotB" ;;
+        label=slotB) slot="slotA" ;;
     esac
 done
 
@@ -34,9 +30,6 @@ swupdate -e "stable,${slot}" -i "$SWU"
 
 if command -v syslinux-setonce >/dev/null 2>&1; then
     syslinux-setonce "${slot}" || true
-fi
-if command -v extlinux >/dev/null 2>&1; then
-    extlinux --once "${slot}" /boot
 fi
 
 echo "Update installed. Next boot set to ${slot}."

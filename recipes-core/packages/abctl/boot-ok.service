@@ -6,7 +6,7 @@ ConditionPathExists=/boot/syslinux.cfg
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/ntpserver-boot-ok.sh
+ExecStart=/usr/sbin/boot-ok.sh
 
 [Install]
 WantedBy=multi-user.target
