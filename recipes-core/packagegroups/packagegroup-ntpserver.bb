@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 inherit packagegroup
 
 RDEPENDS:${PN} = "\
+    abctl \
     dosfstools \
     gpsd \
     iptables \
@@ -12,7 +13,6 @@ RDEPENDS:${PN} = "\
     netcat-openbsd \
     ntp \
     ntpq \
-    ntpserver-abctl \
     pciutils \
     swupdate \
     syslinux \
