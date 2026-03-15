@@ -2,6 +2,8 @@ software = {
     version = "1.0";
 
     galleon = {
+        hardware-compatibility: [ "galleon" ];
+
         stable = {
             slotA = {
                 rootfs = {
