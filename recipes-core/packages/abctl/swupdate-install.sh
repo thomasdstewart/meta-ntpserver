@@ -26,7 +26,7 @@ if [ -z "$slot" ]; then
 fi
 
 echo "Installing update to inactive slot ${slot}"
-swupdate -e "stable,${slot}" -i "$SWU"
+swupdate -B none -H galleon:1.0 -e "stable,${slot}" -i "$SWU"
 
 if command -v syslinux-setonce >/dev/null 2>&1; then
     syslinux-setonce "${slot}" || true

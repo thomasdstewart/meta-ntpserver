@@ -1,6 +1,6 @@
 part /boot --source bootimg-pcbios --ondisk sda --fstype=vfat --label boot --active --align 1024 --size 64 --fsoptions="ro,defaults"
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsA --align 1024 --fixed-size 200M
 part / --source rootfs --ondisk sda --fstype=ext4 --label rootfsB --align 1024 --fixed-size 200M
-part /srv --ondisk sda --fstype=ext4 --label srv --align 1024 --fixed-size 400M
+part /root --ondisk sda --fstype=ext4 --label srv --align 1024 --fixed-size 400M
 
 bootloader --configfile="syslinux-custom.cfg"

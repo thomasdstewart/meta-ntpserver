@@ -25,10 +25,10 @@ FILES:${PN} += " \
 "
 
 do_install() {
-    install -d ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/boot-ok.sh ${D}${sbindir}/boot-ok.sh
-    install -m 0755 ${WORKDIR}/swupdate-install.sh ${D}${sbindir}/swupdate-install.sh
+    install -d "${D}${sbindir}"
+    install -m 0755 "${WORKDIR}/boot-ok.sh" "${D}${sbindir}/boot-ok.sh"
+    install -m 0755 "${WORKDIR}/swupdate-install.sh" "${D}${sbindir}/swupdate-install.sh"
 
-    install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/boot-ok.service ${D}${systemd_system_unitdir}/boot-ok.service
+    install -d "${D}${systemd_system_unitdir}"
+    install -m 0644 "${WORKDIR}/boot-ok.service" "${D}${systemd_system_unitdir}/boot-ok.service"
 }

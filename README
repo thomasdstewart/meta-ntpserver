@@ -49,7 +49,7 @@ This adds an image called ntpserver-image. It expects some configuration to be d
   echo 'MACHINE = "galleon"' >> conf/local.conf
   echo 'DISTRO = "ntpserver"' >> conf/local.conf
   echo 'ROOT_PASSWORD_HASH = "\$5\$XdEvu3X0DbgNUKqa\$AeAvbpYFcve1nRKoDnXCCRB8Mu8USDQ0Yxqdac94Qq6"' >> conf/local.conf
-  echo 'hostname_pn-base-files = "ntpserver"' >> conf/local.conf
+  echo 'hostname:pn-base-files = "ntpserver"' >> conf/local.conf
 ```
 
 Password hashes can be set with: "printf "%q" $(mkpasswd -m sha256crypt password)". Modify the meta-ntpserver/recipes-core/server/ntp.conf file to suite needs.
@@ -89,6 +89,7 @@ Once booted from the USB stick on the real hardware dd the usb to the onboard co
 
 To install an update bundle from the running system (CLI v1 flow):
 ```sh
+  scp tmp/work/galleon-poky-linux/ntpserver-swu/1.0/deploy-ntpserver-swu-swuimage/ntpserver-swu-galleon.rootfs-*.swu root@{IP}:/srv
   ntpserver-swupdate-install.sh /path/to/ntpserver-swu-galleon.swu
   reboot
 ```
@@ -146,6 +147,9 @@ TODO
    * https://github.com/sbabic/meta-swupdate-boards
    * https://stackoverflow.com/questions/60724524/step-by-step-walk-through-on-how-to-use-swupdate-on-raspberry-pi-or-any-embedded
    * https://stackoverflow.com/questions/66873032/meta-swupdate-yocto-gub-instead-of-u-boot-bootloader
+ * syslinux does not allow --once, perhaps switch to: extlinux --once upgrade
+ * switch to grub?
+ * swupdate files
 
 Links
 =====

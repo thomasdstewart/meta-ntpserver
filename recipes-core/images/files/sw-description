@@ -2,24 +2,28 @@ software = {
     version = "1.0";
 
     galleon = {
-        hardware-compatibility: [ "galleon" ];
+        hardware-compatibility = [ "1.0" ];
 
         stable = {
             slotA = {
-                rootfs = {
-                    filename = "ntpserver-image-galleon.rootfs.ext4.gz";
-                    type = "raw";
-                    device = "/dev/disk/by-label/rootfsA";
-                    compressed = "zlib";
-                };
+                images: (
+                    {
+                        filename = "ntpserver-image-galleon.rootfs.ext4.gz";
+                        type = "raw";
+                        device = "/dev/disk/by-partuuid/076c4a2a-02";
+                        compressed = "zlib";
+                    }
+                );
             };
             slotB = {
-                rootfs = {
-                    filename = "ntpserver-image-galleon.rootfs.ext4.gz";
-                    type = "raw";
-                    device = "/dev/disk/by-label/rootfsB";
-                    compressed = "zlib";
-                };
+                images: (
+                    {
+                        filename = "ntpserver-image-galleon.rootfs.ext4.gz";
+                        type = "raw";
+                        device = "/dev/disk/by-partuuid/076c4a2a-03";
+                        compressed = "zlib";
+                    }
+                );
             };
         };
     };
