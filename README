@@ -89,7 +89,7 @@ Once booted from the USB stick on the real hardware dd the usb to the onboard co
 
 To install an update bundle from the running system (CLI v1 flow):
 ```sh
-  scp tmp/work/galleon-poky-linux/ntpserver-swu/1.0/deploy-ntpserver-swu-swuimage/ntpserver-swu-galleon.rootfs-*.swu root@{IP}:/srv
+  scp tmp/work/galleon-poky-linux/ntpserver-swu/1.0/deploy-ntpserver-swu-swuimage/ntpserver-swu-galleon.rootfs-*.swu root@{IP}:/root
   ntpserver-swupdate-install.sh /path/to/ntpserver-swu-galleon.swu
   reboot
 ```

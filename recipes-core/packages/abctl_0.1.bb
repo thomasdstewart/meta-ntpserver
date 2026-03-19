@@ -12,11 +12,7 @@ S = "${WORKDIR}"
 
 inherit systemd
 
-SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE:${PN} = "boot-ok.service"
-SYSTEMD_AUTO_ENABLE:${PN} = "enable"
-
-RDEPENDS:${PN} = "bash coreutils syslinux swupdate util-linux-findmnt"
 
 FILES:${PN} += " \
     ${sbindir}/boot-ok.sh \
